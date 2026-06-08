@@ -1,55 +1,209 @@
-﻿<!DOCTYPE html>
-<html lang=\"zh-CN\">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-<meta charset=\"UTF-8\">
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-<title>心愿后台</title>
-<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
-<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
-<link href=\"https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap\" rel=\"stylesheet\">
-<link rel=\"stylesheet\" href=\"styles.css\">
-<style>
-.admin-wrap { width: min(880px, 94vw); margin: 0 auto; }
-.row { display: grid; grid-template-columns: 140px 1fr; gap: 10px; align-items: center; }
-.input { width: 100%; padding: 10px 12px; border: 1px solid #f2b89a; border-radius: 8px; }
-.table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-.table th, .table td { padding: 10px 8px; border-bottom: 1px solid #f3d5c3; text-align: left; vertical-align: top; }
-.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: #7a5a4b; }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理员后台 · YWLL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main class=\"container admin-wrap\">
-<h1 class=\"headline\">心愿后台</h1>
-<p>本页直接读取 GitHub Issues 作为心愿列表。需要公开记录请在提交时点击新开页的Submit new issue。</p>
-<button id=\"load\" class=\"primary-button\" style=\"margin-top:12px;\">加载心愿</button>
-<table class=\"table\">
-<thead>
-<tr><th>时间</th><th>心愿</th><th>作者</th><th>链接</th></tr>
-</thead>
-<tbody id=\"list\"></tbody>
-</table>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">💕 YWLL</div>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li><a href="album.html">空间相册</a></li>
+      <li><a href="blog.html">爱的日记</a></li>
+      <li><a href="admin.html" class="active">管理员</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container fade-in">
+
+  <!-- 登录 -->
+  <div id="login-panel">
+    <div class="card login-box">
+      <h2>🔐 管理员登录</h2>
+      <p style="color:var(--text-light); font-size:14px; margin-bottom:18px;">请输入管理员密码进入后台</p>
+      <input type="password" id="admin-pwd" placeholder="密码" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">登录</button>
+      <p style="margin-top:12px; font-size:12px; color:var(--text-light);">默认密码：ywll2024</p>
+    </div>
+  </div>
+
+  <!-- 后台 -->
+  <div id="admin-panel" style="display:none;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
+      <h2 style="font-size:22px; color:var(--rose-deep);">📊 管理中心</h2>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-secondary btn-sm" onclick="exportData()">📥 导出数据</button>
+        <button class="btn btn-danger btn-sm" onclick="resetData()">🗑️ 重置数据</button>
+        <button class="btn btn-secondary btn-sm" onclick="doLogout()">退出登录</button>
+      </div>
+    </div>
+
+    <!-- 统计 -->
+    <div class="admin-stats">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-album">0</div>
+        <div class="stat-label">相册照片</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-blog">0</div>
+        <div class="stat-label">日记文章</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-guest">0</div>
+        <div class="stat-label">访客祝福</div>
+      </div>
+    </div>
+
+    <!-- 访客祝福管理 -->
+    <div class="card" style="margin-bottom:20px;">
+      <h3 style="font-size:18px; color:var(--rose-deep); margin-bottom:12px;">🎉 访客祝福</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>时间</th><th>姓名</th><th>祝福内容</th><th style="width:80px;">操作</th></tr></thead>
+          <tbody id="admin-guest"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 相册管理 -->
+    <div class="card" style="margin-bottom:20px;">
+      <h3 style="font-size:18px; color:var(--rose-deep); margin-bottom:12px;">📸 相册管理</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:60px;">预览</th><th>标题</th><th>日期</th><th style="width:80px;">操作</th></tr></thead>
+          <tbody id="admin-album"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 博客管理 -->
+    <div class="card" style="margin-bottom:20px;">
+      <h3 style="font-size:18px; color:var(--rose-deep); margin-bottom:12px;">📝 日记管理</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>日期</th><th>标题</th><th>标签</th><th style="width:80px;">操作</th></tr></thead>
+          <tbody id="admin-blog"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </main>
+
+<footer class="footer">
+  <p>💕 YWLL · 我们的爱情纪念站 · 始于心动，终于白首</p>
+</footer>
+
+<script src="app.js"></script>
 <script>
 (function(){
-const REPO = 'yinweibuaa/happybirthday';
-const API = 'https://api.github.com/repos/' + REPO + '/issues?state=open&per_page=50';
-const list = document.getElementById('list');
-document.getElementById('load').addEventListener('click', async () => {
-list.innerHTML = '<tr><td colspan="4">加载中</td></tr>';
-try {
-const resp = await fetch(API, { headers: { 'Accept': 'application/vnd.github+json' } });
-if (!resp.ok) throw new Error('HTTP ' + resp.status);
-const data = await resp.json();
-list.innerHTML = data.map((i) => {
-const created = new Date(i.created_at).toLocaleString();
-const body = (i.body || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const author = (i.user && i.user.login) || '';
-return <tr><td></td><td></td><td></td><td><a href="" target="_blank" rel="noopener">查看</a></td></tr>;
-}).join('') || '<tr><td colspan="4">暂无数据</td></tr>';
-} catch (e) {
-list.innerHTML = '<tr><td colspan="4">加载失败，请稍后再试</td></tr>';
-}
-});
+  YWLL.initDemoData();
+
+  async function init() {
+    const ok = await YWLL.checkAdmin();
+    if (ok) showPanel(); else showLogin();
+  }
+
+  function showLogin() {
+    document.getElementById('login-panel').style.display = 'block';
+    document.getElementById('admin-panel').style.display = 'none';
+  }
+  function showPanel() {
+    document.getElementById('login-panel').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    refreshAll();
+  }
+
+  function refreshAll() {
+    const albums = YWLL.getAlbum();
+    const blogs = YWLL.getBlog();
+    const guests = YWLL.getGuestbook();
+    document.getElementById('stat-album').textContent = albums.length;
+    document.getElementById('stat-blog').textContent = blogs.length;
+    document.getElementById('stat-guest').textContent = guests.length;
+
+    const gBody = document.getElementById('admin-guest');
+    gBody.innerHTML = guests.length ? guests.map(g => `
+      <tr>
+        <td>${g.date}</td>
+        <td>${escapeHtml(g.name)}</td>
+        <td>${escapeHtml(g.message)}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="delGuest('${g.id}')">删除</button></td>
+      </tr>
+    `).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--text-light);">暂无数据</td></tr>';
+
+    const aBody = document.getElementById('admin-album');
+    aBody.innerHTML = albums.length ? albums.map(a => `
+      <tr>
+        <td><img src="${a.src}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;"></td>
+        <td>${escapeHtml(a.title)}</td>
+        <td>${a.date}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="delAlbum('${a.id}')">删除</button></td>
+      </tr>
+    `).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--text-light);">暂无数据</td></tr>';
+
+    const bBody = document.getElementById('admin-blog');
+    bBody.innerHTML = blogs.length ? blogs.map(b => `
+      <tr>
+        <td>${b.date}</td>
+        <td>${escapeHtml(b.title)}</td>
+        <td>${escapeHtml(b.tags||'')}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="delBlog('${b.id}')">删除</button></td>
+      </tr>
+    `).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--text-light);">暂无数据</td></tr>';
+  }
+
+  function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; }
+
+  window.doLogin = async function() {
+    const pwd = document.getElementById('admin-pwd').value;
+    if (!pwd) { YWLL.toast('请输入密码', 'error'); return; }
+    const ok = await YWLL.loginAdmin(pwd);
+    if (ok) { YWLL.toast('登录成功'); showPanel(); }
+    else { YWLL.toast('密码错误', 'error'); }
+  };
+  window.doLogout = function() { YWLL.logoutAdmin(); showLogin(); YWLL.toast('已退出登录'); };
+
+  window.delGuest = function(id) { if(!confirm('确定删除这条祝福？'))return; YWLL.delGuestbook(id); refreshAll(); YWLL.toast('已删除'); };
+  window.delAlbum = function(id) { if(!confirm('确定删除这张照片？'))return; YWLL.delAlbum(id); refreshAll(); YWLL.toast('已删除'); };
+  window.delBlog = function(id) { if(!confirm('确定删除这篇日记？'))return; YWLL.delBlog(id); refreshAll(); YWLL.toast('已删除'); };
+
+  window.exportData = function() {
+    const data = {
+      album: YWLL.getAlbum(),
+      blog: YWLL.getBlog(),
+      guestbook: YWLL.getGuestbook(),
+      exportedAt: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'ywll-data-' + YWLL.fmtDate() + '.json';
+    a.click(); URL.revokeObjectURL(url);
+    YWLL.toast('数据已导出');
+  };
+
+  window.resetData = function() {
+    if (!confirm('⚠️ 确定重置所有数据？这将清空相册、日记和祝福，且不可恢复！')) return;
+    if (!confirm('再次确认：你真的要清空所有数据吗？')) return;
+    localStorage.removeItem('ywll_album');
+    localStorage.removeItem('ywll_blog');
+    localStorage.removeItem('ywll_guestbook');
+    localStorage.removeItem('ywll_inited');
+    YWLL.initDemoData();
+    refreshAll();
+    YWLL.toast('数据已重置为默认状态');
+  };
+
+  init();
 })();
 </script>
 </body>

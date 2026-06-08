@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空间相册 · YWLL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.upload-zone {
+  border: 2px dashed var(--rose);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  color: var(--text-light);
+  background: rgba(255,255,255,0.5);
+  transition: background .2s, border-color .2s;
+  cursor: pointer;
+}
+.upload-zone:hover { background: rgba(255,255,255,0.8); border-color: var(--rose-deep); }
+.upload-zone input { display: none; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">💕 YWLL</div>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li><a href="album.html" class="active">空间相册</a></li>
+      <li><a href="blog.html">爱的日记</a></li>
+      <li><a href="admin.html">管理员</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container fade-in">
+  <div class="card">
+    <h2 style="font-size:22px; color:var(--rose-deep); margin-bottom:6px;">📸 空间相册</h2>
+    <p style="color:var(--text-light); font-size:14px; margin-bottom:18px;">每一张照片，都是时光写给我们的情书</p>
+
+    <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+      <div style="font-size:36px; margin-bottom:8px;">📷</div>
+      <div>点击或拖拽上传照片</div>
+      <div style="font-size:12px; margin-top:6px; opacity:.7;">支持 JPG / PNG，单张建议不超过 5MB</div>
+      <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+    </div>
+
+    <div style="margin-top:18px; display:none;" id="upload-preview"></div>
+    <div style="text-align:right; margin-top:10px; display:none;" id="upload-actions">
+      <button class="btn btn-secondary btn-sm" onclick="clearUpload()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmUpload()">确认上传</button>
+    </div>
+
+    <div class="album-grid" id="album-grid" style="margin-top:28px;"></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>💕 YWLL · 我们的爱情纪念站 · 始于心动，终于白首</p>
+</footer>
+
+<div class="lightbox" id="lightbox" onclick="YWLL.closeLightbox()">
+  <button class="lightbox-close">&times;</button>
+  <img id="lightbox-img" src="" alt="preview">
+</div>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  YWLL.initDemoData();
+  let pending = [];
+
+  function render() {
+    const grid = document.getElementById('album-grid');
+    const data = YWLL.getAlbum();
+    if (!data.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);">相册为空，快去上传第一张爱的见证吧~</p>'; return; }
+    grid.innerHTML = data.map(item => `
+      <div class="album-item" onclick="YWLL.openLightbox('${item.src}')">
+        <img src="${item.src}" alt="${escapeHtml(item.title)}">
+        <div class="album-title">${escapeHtml(item.title)}</div>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+  async function handleFiles(files) {
+    pending = [];
+    const preview = document.getElementById('upload-preview');
+    const actions = document.getElementById('upload-actions');
+    preview.innerHTML = '';
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) continue;
+      try {
+        const dataUrl = await YWLL.compressImage(file, 1200, 1200, 0.75);
+        pending.push({ dataUrl, title: file.name.replace(/\.[^.]+$/, '') });
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--rose);';
+        preview.appendChild(img);
+      } catch (e) { console.error(e); }
+    }
+    if (pending.length) {
+      preview.style.display = 'flex'; preview.style.gap = '8px'; preview.style.flexWrap = 'wrap';
+      actions.style.display = 'block';
+    }
+  }
+  window.handleFiles = handleFiles;
+
+  window.clearUpload = function() {
+    pending = [];
+    document.getElementById('upload-preview').innerHTML = '';
+    document.getElementById('upload-preview').style.display = 'none';
+    document.getElementById('upload-actions').style.display = 'none';
+    document.getElementById('file-input').value = '';
+  };
+
+  window.confirmUpload = function() {
+    pending.forEach(p => YWLL.addAlbum({ title: p.title, desc: '', src: p.dataUrl }));
+    YWLL.toast(`成功上传 ${pending.length} 张照片 💕`);
+    clearUpload();
+    render();
+  };
+
+  // 拖拽上传
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--rose-deep)'; });
+  zone.addEventListener('dragleave', e => { e.preventDefault(); zone.style.borderColor = 'var(--rose)'; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.style.borderColor = 'var(--rose)';
+    handleFiles(e.dataTransfer.files);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

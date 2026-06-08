@@ -1,33 +1,167 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>生日快乐</title>
+<title>YWLL · 我们的爱情纪念</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main class="container">
-<h1 class="headline">生日快乐</h1>
-<button id="wish-toggle" class="primary-button">生日许愿</button>
 
-<section id="wish-section" class="wish-section" hidden>
-<label for="wish-text" class="wish-label">在这里写下你的心愿：</label>
-<textarea id="wish-text" class="wish-text" rows="5" placeholder="愿所有美好如期而至"></textarea>
-<button id="submit-wish" class="submit-button">提交心愿</button>
-</section>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">💕 YWLL</div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">首页</a></li>
+      <li><a href="album.html">空间相册</a></li>
+      <li><a href="blog.html">爱的日记</a></li>
+      <li><a href="admin.html">管理员</a></li>
+    </ul>
+  </div>
+</nav>
 
-<p id="final-message" class="final-message" hidden>丽丽生日快乐</p>
+<main class="container fade-in">
+
+  <!-- 英雄区 -->
+  <section class="hero">
+    <img src="hero.jpg" alt="我们的爱情" class="hero-img">
+    <div class="hero-content">
+      <h1>YWLL · 永恒的爱</h1>
+      <p>从遇见你那一刻起，我的世界便开满了花。<br>愿用一生的时间，写一封给你的情书。</p>
+    </div>
+  </section>
+
+  <!-- 爱情语句 -->
+  <section style="margin-top:36px;">
+    <h2 style="text-align:center; font-size:22px; color:var(--rose-deep); margin-bottom:6px;">💌 爱的絮语</h2>
+    <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:18px;">每一句，都是心底最温柔的告白</p>
+    <div class="quotes">
+      <div class="quote-item">
+        <p>"我喜欢你，不是因为你是谁，而是因为和你在一起时，我是谁。"</p>
+        <div class="author">— 致最爱的你</div>
+      </div>
+      <div class="quote-item">
+        <p>"世间万物皆苦，你明目张胆的偏爱就是救赎。"</p>
+        <div class="author">— 每日情书</div>
+      </div>
+      <div class="quote-item">
+        <p>"我想和你一起生活，在某个小镇，共享无尽的黄昏和绵绵不绝的钟声。"</p>
+        <div class="author">— 茨维塔耶娃</div>
+      </div>
+      <div class="quote-item">
+        <p>"遇见你之前，我没想过结婚；遇见你之后，结婚我没想过别人。"</p>
+        <div class="author">— 钱钟书</div>
+      </div>
+      <div class="quote-item">
+        <p>"爱是恒久忍耐，又有恩慈；爱是不嫉妒，爱是不自夸，不张狂。"</p>
+        <div class="author">— 《圣经·哥林多前书》</div>
+      </div>
+      <div class="quote-item">
+        <p>"春水初生，春林初盛，春风十里，不如你。"</p>
+        <div class="author">— 冯唐</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 精选照片 -->
+  <section style="margin-top:40px;">
+    <h2 style="text-align:center; font-size:22px; color:var(--rose-deep); margin-bottom:6px;">📸 幸福瞬间</h2>
+    <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:18px;">定格每一个属于我们的美好时刻</p>
+    <div class="photo-grid">
+      <div class="photo-card" onclick="YWLL.openLightbox('photo1.jpg')">
+        <img src="photo1.jpg" alt="相遇">
+      </div>
+      <div class="photo-card" onclick="YWLL.openLightbox('photo2.jpg')">
+        <img src="photo2.jpg" alt="旅行">
+      </div>
+      <div class="photo-card" onclick="YWLL.openLightbox('photo3.jpg')">
+        <img src="photo3.jpg" alt="承诺">
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:18px;">
+      <a href="album.html" class="btn btn-secondary">查看更多相册 →</a>
+    </div>
+  </section>
+
+  <!-- 访客祝福 -->
+  <section style="margin-top:40px;">
+    <h2 style="text-align:center; font-size:22px; color:var(--rose-deep); margin-bottom:6px;">🎉 好友祝福</h2>
+    <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:18px;">来自亲朋好友的温馨祝福</p>
+    <div class="card">
+      <div id="home-guestbook" class="guestbook-list"></div>
+      <div style="text-align:center; margin-top:18px;">
+        <button class="btn btn-primary" onclick="YWLL.openModal('guest-modal')">✍️ 写下祝福</button>
+      </div>
+    </div>
+  </section>
+
 </main>
 
-<audio id="happy-audio" preload="auto">
-<source src="https://upload.wikimedia.org/wikipedia/commons/1/10/Happy_Birthday_to_You_%28Instrumental%29.ogg" type="audio/ogg">
-<source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/1/10/Happy_Birthday_to_You_%28Instrumental%29.ogg/Happy_Birthday_to_You_%28Instrumental%29.ogg.mp3" type="audio/mpeg">
-</audio>
+<footer class="footer">
+  <p>💕 YWLL · 我们的爱情纪念站 · 始于心动，终于白首</p>
+  <p style="margin-top:4px; opacity:.7;">www.ywll.love</p>
+</footer>
 
-<script src="script.js"></script>
+<!-- 祝福弹窗 -->
+<div class="modal-overlay" id="guest-modal" onclick="if(event.target===this)YWLL.closeModal('guest-modal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>写下你的祝福</h2>
+      <button class="modal-close" onclick="YWLL.closeModal('guest-modal')">&times;</button>
+    </div>
+    <input type="text" id="g-name" placeholder="你的名字" maxlength="20">
+    <textarea id="g-msg" placeholder="写下温馨的祝福语..." rows="4" maxlength="300"></textarea>
+    <div style="text-align:right; margin-top:12px;">
+      <button class="btn btn-secondary btn-sm" onclick="YWLL.closeModal('guest-modal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="submitGuest()">提交祝福</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="YWLL.closeLightbox()">
+  <button class="lightbox-close">&times;</button>
+  <img id="lightbox-img" src="" alt="preview">
+</div>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  YWLL.initDemoData();
+
+  function renderGuests() {
+    const list = document.getElementById('home-guestbook');
+    const data = YWLL.getGuestbook().slice(0, 6);
+    if (!data.length) { list.innerHTML = '<p style="text-align:center;color:var(--text-light);">暂无祝福，来做第一个留言的人吧~</p>'; return; }
+    list.innerHTML = data.map(g => `
+      <div class="guest-item">
+        <div class="guest-name">${escapeHtml(g.name)}</div>
+        <div class="guest-date">${g.date}</div>
+        <div class="guest-msg">${escapeHtml(g.message)}</div>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(t) {
+    const d = document.createElement('div');
+    d.textContent = t; return d.innerHTML;
+  }
+
+  window.submitGuest = function() {
+    const name = document.getElementById('g-name').value.trim();
+    const msg = document.getElementById('g-msg').value.trim();
+    if (!name || !msg) { YWLL.toast('请填写名字和祝福内容', 'error'); return; }
+    YWLL.addGuestbook({ name, message: msg });
+    YWLL.closeModal('guest-modal');
+    YWLL.toast('祝福已送达 💕');
+    renderGuests();
+  };
+
+  renderGuests();
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爱的日记 · YWLL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">💕 YWLL</div>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li><a href="album.html">空间相册</a></li>
+      <li><a href="blog.html" class="active">爱的日记</a></li>
+      <li><a href="admin.html">管理员</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container fade-in">
+  <div class="card">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h2 style="font-size:22px; color:var(--rose-deep); margin-bottom:4px;">📝 爱的日记</h2>
+        <p style="color:var(--text-light); font-size:14px;">用文字记录下每一个心动瞬间</p>
+      </div>
+      <button class="btn btn-primary" onclick="YWLL.openModal('blog-modal')">✍️ 写日记</button>
+    </div>
+
+    <div class="blog-list" id="blog-list"></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>💕 YWLL · 我们的爱情纪念站 · 始于心动，终于白首</p>
+</footer>
+
+<!-- 写日记弹窗 -->
+<div class="modal-overlay" id="blog-modal" onclick="if(event.target===this)YWLL.closeModal('blog-modal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>写一篇日记</h2>
+      <button class="modal-close" onclick="YWLL.closeModal('blog-modal')">&times;</button>
+    </div>
+    <input type="text" id="b-title" placeholder="标题" maxlength="60">
+    <input type="text" id="b-tags" placeholder="标签，用逗号分隔（可选）" maxlength="40" style="margin-top:10px;">
+    <textarea id="b-content" placeholder="写下今天的心情与故事..." rows="8" style="margin-top:10px;"></textarea>
+    <div style="text-align:right; margin-top:12px;">
+      <button class="btn btn-secondary btn-sm" onclick="YWLL.closeModal('blog-modal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="submitBlog()">发布</button>
+    </div>
+  </div>
+</div>
+
+<!-- 文章详情弹窗 -->
+<div class="modal-overlay" id="blog-view-modal" onclick="if(event.target===this)YWLL.closeModal('blog-view-modal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="bv-title">标题</h2>
+      <button class="modal-close" onclick="YWLL.closeModal('blog-view-modal')">&times;</button>
+    </div>
+    <div class="blog-meta" id="bv-meta"></div>
+    <div id="bv-content" style="margin-top:14px; line-height:1.9; color:var(--text); white-space:pre-wrap;"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  YWLL.initDemoData();
+
+  function render() {
+    const list = document.getElementById('blog-list');
+    const data = YWLL.getBlog();
+    if (!data.length) { list.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:30px 0;">还没有日记，写下第一篇爱的记录吧~</p>'; return; }
+    list.innerHTML = data.map(item => `
+      <div class="blog-item">
+        <h3><a href="javascript:void(0)" onclick="openBlog('${item.id}')">${escapeHtml(item.title)}</a></h3>
+        <div class="blog-meta">${item.date}${item.tags ? ' · ' + escapeHtml(item.tags) : ''}</div>
+        <div class="blog-excerpt">${escapeHtml(item.content)}</div>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+  window.openBlog = function(id) {
+    const item = YWLL.getBlog().find(x => x.id === id);
+    if (!item) return;
+    document.getElementById('bv-title').textContent = item.title;
+    document.getElementById('bv-meta').textContent = item.date + (item.tags ? ' · ' + item.tags : '');
+    document.getElementById('bv-content').textContent = item.content;
+    YWLL.openModal('blog-view-modal');
+  };
+
+  window.submitBlog = function() {
+    const title = document.getElementById('b-title').value.trim();
+    const content = document.getElementById('b-content').value.trim();
+    const tags = document.getElementById('b-tags').value.trim();
+    if (!title || !content) { YWLL.toast('请填写标题和内容', 'error'); return; }
+    YWLL.addBlog({ title, content, tags });
+    YWLL.closeModal('blog-modal');
+    document.getElementById('b-title').value = '';
+    document.getElementById('b-content').value = '';
+    document.getElementById('b-tags').value = '';
+    YWLL.toast('日记发布成功 💕');
+    render();
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
