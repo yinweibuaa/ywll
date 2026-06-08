@@ -8,20 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<style>
-.upload-zone {
-  border: 2px dashed var(--rose);
-  border-radius: var(--radius);
-  padding: 32px;
-  text-align: center;
-  color: var(--text-light);
-  background: rgba(255,255,255,0.5);
-  transition: background .2s, border-color .2s;
-  cursor: pointer;
-}
-.upload-zone:hover { background: rgba(255,255,255,0.8); border-color: var(--rose-deep); }
-.upload-zone input { display: none; }
-</style>
 </head>
 <body>
 
@@ -39,20 +25,20 @@
 
 <main class="container fade-in">
   <div class="card">
-    <h2 style="font-size:22px; color:var(--rose-deep); margin-bottom:6px;">📸 空间相册</h2>
-    <p style="color:var(--text-light); font-size:14px; margin-bottom:18px;">每一张照片，都是时光写给我们的情书</p>
+    <h2 class="section-title">📸 空间相册</h2>
+    <p class="section-subtitle">每一张照片，都是时光写给我们的情书</p>
 
     <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
       <div style="font-size:36px; margin-bottom:8px;">📷</div>
-      <div>点击或拖拽上传照片</div>
-      <div style="font-size:12px; margin-top:6px; opacity:.7;">支持 JPG / PNG，单张建议不超过 5MB</div>
+      <div style="font-size:15px; color:var(--text);">点击或拖拽上传照片</div>
+      <div style="font-size:12px; margin-top:6px; color:var(--text-light);">支持 JPG / PNG，单张建议不超过 5MB</div>
       <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
     </div>
 
-    <div style="margin-top:18px; display:none;" id="upload-preview"></div>
+    <div style="margin-top:14px; display:none; gap:8px; flex-wrap:wrap;" id="upload-preview"></div>
     <div style="text-align:right; margin-top:10px; display:none;" id="upload-actions">
       <button class="btn btn-secondary btn-sm" onclick="clearUpload()">取消</button>
-      <button class="btn btn-primary btn-sm" onclick="confirmUpload()">确认上传</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmUpload()" style="margin-left:8px;">确认上传</button>
     </div>
 
     <div class="album-grid" id="album-grid" style="margin-top:28px;"></div>
@@ -77,7 +63,7 @@
   function render() {
     const grid = document.getElementById('album-grid');
     const data = YWLL.getAlbum();
-    if (!data.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);">相册为空，快去上传第一张爱的见证吧~</p>'; return; }
+    if (!data.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:30px 0;">相册为空，快去上传第一张爱的见证吧~</p>'; return; }
     grid.innerHTML = data.map(item => `
       <div class="album-item" onclick="YWLL.openLightbox('${item.src}')">
         <img src="${item.src}" alt="${escapeHtml(item.title)}">
@@ -100,12 +86,12 @@
         pending.push({ dataUrl, title: file.name.replace(/\.[^.]+$/, '') });
         const img = document.createElement('img');
         img.src = dataUrl;
-        img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--rose);';
+        img.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--rose-light);';
         preview.appendChild(img);
       } catch (e) { console.error(e); }
     }
     if (pending.length) {
-      preview.style.display = 'flex'; preview.style.gap = '8px'; preview.style.flexWrap = 'wrap';
+      preview.style.display = 'flex';
       actions.style.display = 'block';
     }
   }
@@ -126,13 +112,12 @@
     render();
   };
 
-  // 拖拽上传
   const zone = document.getElementById('upload-zone');
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--rose-deep)'; });
-  zone.addEventListener('dragleave', e => { e.preventDefault(); zone.style.borderColor = 'var(--rose)'; });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--rose)'; });
+  zone.addEventListener('dragleave', e => { e.preventDefault(); zone.style.borderColor = 'var(--rose-light)'; });
   zone.addEventListener('drop', e => {
     e.preventDefault();
-    zone.style.borderColor = 'var(--rose)';
+    zone.style.borderColor = 'var(--rose-light)';
     handleFiles(e.dataTransfer.files);
   });
 

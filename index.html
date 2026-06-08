@@ -28,38 +28,50 @@
   <!-- 英雄区 -->
   <section class="hero">
     <img src="hero.jpg" alt="我们的爱情" class="hero-img">
+    <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1>YWLL · 永恒的爱</h1>
       <p>从遇见你那一刻起，我的世界便开满了花。<br>愿用一生的时间，写一封给你的情书。</p>
     </div>
   </section>
 
+  <!-- 纪念日倒计时 -->
+  <section class="countdown-bar">
+    <div class="countdown-label">💍 我们的结婚纪念日 · 2025.5.28</div>
+    <div class="countdown-digits" id="countdown">
+      <div class="countdown-item"><div class="num" id="cd-days">0</div><div class="unit">天</div></div>
+      <div class="countdown-item"><div class="num" id="cd-hours">0</div><div class="unit">时</div></div>
+      <div class="countdown-item"><div class="num" id="cd-minutes">0</div><div class="unit">分</div></div>
+      <div class="countdown-item"><div class="num" id="cd-seconds">0</div><div class="unit">秒</div></div>
+    </div>
+  </section>
+
   <!-- 爱情语句 -->
-  <section style="margin-top:36px;">
-    <h2 style="text-align:center; font-size:22px; color:var(--rose-deep); margin-bottom:6px;">💌 爱的絮语</h2>
-    <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:18px;">每一句，都是心底最温柔的告白</p>
-    <div class="quotes">
-      <div class="quote-item">
+  <section style="margin-top:40px;">
+    <h2 class="section-title">💌 爱的絮语</h2>
+    <p class="section-subtitle">每一句，都是心底最温柔的告白</p>
+    <div class="quotes-grid">
+      <div class="quote-card">
         <p>"我喜欢你，不是因为你是谁，而是因为和你在一起时，我是谁。"</p>
         <div class="author">— 致最爱的你</div>
       </div>
-      <div class="quote-item">
+      <div class="quote-card">
         <p>"世间万物皆苦，你明目张胆的偏爱就是救赎。"</p>
         <div class="author">— 每日情书</div>
       </div>
-      <div class="quote-item">
+      <div class="quote-card">
         <p>"我想和你一起生活，在某个小镇，共享无尽的黄昏和绵绵不绝的钟声。"</p>
         <div class="author">— 茨维塔耶娃</div>
       </div>
-      <div class="quote-item">
+      <div class="quote-card">
         <p>"遇见你之前，我没想过结婚；遇见你之后，结婚我没想过别人。"</p>
         <div class="author">— 钱钟书</div>
       </div>
-      <div class="quote-item">
-        <p>"爱是恒久忍耐，又有恩慈；爱是不嫉妒，爱是不自夸，不张狂。"</p>
-        <div class="author">— 《圣经·哥林多前书》</div>
+      <div class="quote-card">
+        <p>"爱是恒久忍耐，又有恩慈；爱是不嫉妒，不自夸，不张狂。"</p>
+        <div class="author">— 《哥林多前书》</div>
       </div>
-      <div class="quote-item">
+      <div class="quote-card">
         <p>"春水初生，春林初盛，春风十里，不如你。"</p>
         <div class="author">— 冯唐</div>
       </div>
@@ -67,32 +79,32 @@
   </section>
 
   <!-- 精选照片 -->
-  <section style="margin-top:40px;">
-    <h2 style="text-align:center; font-size:22px; color:var(--rose-deep); margin-bottom:6px;">📸 幸福瞬间</h2>
-    <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:18px;">定格每一个属于我们的美好时刻</p>
-    <div class="photo-grid">
-      <div class="photo-card" onclick="YWLL.openLightbox('photo1.jpg')">
+  <section style="margin-top:44px;">
+    <h2 class="section-title">📸 幸福瞬间</h2>
+    <p class="section-subtitle">定格每一个属于我们的美好时刻</p>
+    <div class="photos-row">
+      <div class="photo-frame" onclick="YWLL.openLightbox('photo1.jpg')">
         <img src="photo1.jpg" alt="相遇">
       </div>
-      <div class="photo-card" onclick="YWLL.openLightbox('photo2.jpg')">
+      <div class="photo-frame" onclick="YWLL.openLightbox('photo2.jpg')">
         <img src="photo2.jpg" alt="旅行">
       </div>
-      <div class="photo-card" onclick="YWLL.openLightbox('photo3.jpg')">
+      <div class="photo-frame" onclick="YWLL.openLightbox('photo3.jpg')">
         <img src="photo3.jpg" alt="承诺">
       </div>
     </div>
-    <div style="text-align:center; margin-top:18px;">
+    <div style="text-align:center; margin-top:22px;">
       <a href="album.html" class="btn btn-secondary">查看更多相册 →</a>
     </div>
   </section>
 
   <!-- 访客祝福 -->
-  <section style="margin-top:40px;">
-    <h2 style="text-align:center; font-size:22px; color:var(--rose-deep); margin-bottom:6px;">🎉 好友祝福</h2>
-    <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:18px;">来自亲朋好友的温馨祝福</p>
+  <section style="margin-top:44px;">
+    <h2 class="section-title">🎉 好友祝福</h2>
+    <p class="section-subtitle">来自亲朋好友的温馨祝福</p>
     <div class="card">
-      <div id="home-guestbook" class="guestbook-list"></div>
-      <div style="text-align:center; margin-top:18px;">
+      <div id="home-guestbook" class="guestbook-grid"></div>
+      <div style="text-align:center; margin-top:22px;">
         <button class="btn btn-primary" onclick="YWLL.openModal('guest-modal')">✍️ 写下祝福</button>
       </div>
     </div>
@@ -113,10 +125,10 @@
       <button class="modal-close" onclick="YWLL.closeModal('guest-modal')">&times;</button>
     </div>
     <input type="text" id="g-name" placeholder="你的名字" maxlength="20">
-    <textarea id="g-msg" placeholder="写下温馨的祝福语..." rows="4" maxlength="300"></textarea>
-    <div style="text-align:right; margin-top:12px;">
+    <textarea id="g-msg" placeholder="写下温馨的祝福语..." rows="4" maxlength="300" style="margin-top:10px;"></textarea>
+    <div style="text-align:right; margin-top:14px;">
       <button class="btn btn-secondary btn-sm" onclick="YWLL.closeModal('guest-modal')">取消</button>
-      <button class="btn btn-primary btn-sm" onclick="submitGuest()">提交祝福</button>
+      <button class="btn btn-primary btn-sm" onclick="submitGuest()" style="margin-left:8px;">提交祝福</button>
     </div>
   </div>
 </div>
@@ -132,12 +144,30 @@
 (function(){
   YWLL.initDemoData();
 
+  // 纪念日倒计时
+  const ANNIVERSARY = new Date('2025-05-28T00:00:00');
+  function updateCountdown() {
+    const now = new Date();
+    let diff = ANNIVERSARY - now;
+    if (diff < 0) diff = 0;
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const secs = Math.floor((diff % (1000*60)) / 1000);
+    document.getElementById('cd-days').textContent = days;
+    document.getElementById('cd-hours').textContent = hours;
+    document.getElementById('cd-minutes').textContent = mins;
+    document.getElementById('cd-seconds').textContent = secs;
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
   function renderGuests() {
     const list = document.getElementById('home-guestbook');
     const data = YWLL.getGuestbook().slice(0, 6);
-    if (!data.length) { list.innerHTML = '<p style="text-align:center;color:var(--text-light);">暂无祝福，来做第一个留言的人吧~</p>'; return; }
+    if (!data.length) { list.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);">暂无祝福，来做第一个留言的人吧~</p>'; return; }
     list.innerHTML = data.map(g => `
-      <div class="guest-item">
+      <div class="guest-card">
         <div class="guest-name">${escapeHtml(g.name)}</div>
         <div class="guest-date">${g.date}</div>
         <div class="guest-msg">${escapeHtml(g.message)}</div>
@@ -157,6 +187,8 @@
     YWLL.addGuestbook({ name, message: msg });
     YWLL.closeModal('guest-modal');
     YWLL.toast('祝福已送达 💕');
+    document.getElementById('g-name').value = '';
+    document.getElementById('g-msg').value = '';
     renderGuests();
   };
 

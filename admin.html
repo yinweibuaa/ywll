@@ -29,18 +29,17 @@
   <div id="login-panel">
     <div class="card login-box">
       <h2>🔐 管理员登录</h2>
-      <p style="color:var(--text-light); font-size:14px; margin-bottom:18px;">请输入管理员密码进入后台</p>
+      <p style="color:var(--text-light); font-size:14px; margin-bottom:20px;">请输入管理员密码进入后台</p>
       <input type="password" id="admin-pwd" placeholder="密码" onkeydown="if(event.key==='Enter')doLogin()">
-      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">登录</button>
-      <p style="margin-top:12px; font-size:12px; color:var(--text-light);">默认密码：ywll2024</p>
+      <button class="btn btn-primary" style="width:100%; margin-top:4px;" onclick="doLogin()">登录</button>
     </div>
   </div>
 
   <!-- 后台 -->
   <div id="admin-panel" style="display:none;">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
-      <h2 style="font-size:22px; color:var(--rose-deep);">📊 管理中心</h2>
-      <div style="display:flex; gap:8px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+      <h2 style="font-size:22px; color:var(--rose);">📊 管理中心</h2>
+      <div style="display:flex; gap:10px;">
         <button class="btn btn-secondary btn-sm" onclick="exportData()">📥 导出数据</button>
         <button class="btn btn-danger btn-sm" onclick="resetData()">🗑️ 重置数据</button>
         <button class="btn btn-secondary btn-sm" onclick="doLogout()">退出登录</button>
@@ -64,8 +63,8 @@
     </div>
 
     <!-- 访客祝福管理 -->
-    <div class="card" style="margin-bottom:20px;">
-      <h3 style="font-size:18px; color:var(--rose-deep); margin-bottom:12px;">🎉 访客祝福</h3>
+    <div class="card admin-section">
+      <h3>🎉 访客祝福</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>时间</th><th>姓名</th><th>祝福内容</th><th style="width:80px;">操作</th></tr></thead>
@@ -75,8 +74,8 @@
     </div>
 
     <!-- 相册管理 -->
-    <div class="card" style="margin-bottom:20px;">
-      <h3 style="font-size:18px; color:var(--rose-deep); margin-bottom:12px;">📸 相册管理</h3>
+    <div class="card admin-section">
+      <h3>📸 相册管理</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th style="width:60px;">预览</th><th>标题</th><th>日期</th><th style="width:80px;">操作</th></tr></thead>
@@ -86,8 +85,8 @@
     </div>
 
     <!-- 博客管理 -->
-    <div class="card" style="margin-bottom:20px;">
-      <h3 style="font-size:18px; color:var(--rose-deep); margin-bottom:12px;">📝 日记管理</h3>
+    <div class="card admin-section">
+      <h3>📝 日记管理</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>日期</th><th>标题</th><th>标签</th><th style="width:80px;">操作</th></tr></thead>
@@ -143,7 +142,7 @@
     const aBody = document.getElementById('admin-album');
     aBody.innerHTML = albums.length ? albums.map(a => `
       <tr>
-        <td><img src="${a.src}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;"></td>
+        <td><img src="${a.src}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;"></td>
         <td>${escapeHtml(a.title)}</td>
         <td>${a.date}</td>
         <td><button class="btn btn-danger btn-sm" onclick="delAlbum('${a.id}')">删除</button></td>
