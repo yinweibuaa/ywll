@@ -206,7 +206,7 @@ textarea { resize: vertical; min-height: 100px; }
 .anniversary-bar {
   background: linear-gradient(135deg, var(--cream-card), #fff);
   border-radius: var(--radius);
-  padding: 28px;
+  padding: 28px 20px;
   margin-top: 28px;
   text-align: center;
   box-shadow: 0 6px 20px var(--shadow);
@@ -219,28 +219,75 @@ textarea { resize: vertical; min-height: 100px; }
 .anniversary-bar .label {
   font-size: 15px;
   color: var(--text-light);
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
-.anniversary-digits {
-  display: flex;
+.flip-digits {
+  display: inline-flex;
+  align-items: flex-start;
   justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
 }
-.anniversary-item {
-  text-align: center;
-  min-width: 72px;
+.flip-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
-.anniversary-item .num {
-  font-size: 38px;
+.flip-card {
+  width: 68px;
+  height: 76px;
+  background: linear-gradient(180deg, #fdf6f4 0%, #fff 50%, #fdf6f4 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+  border: 1px solid rgba(224,108,117,0.12);
+  font-size: 32px;
   font-weight: 700;
   color: var(--rose);
-  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  perspective: 300px;
 }
-.anniversary-item .unit {
-  font-size: 13px;
+.flip-card::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 1px;
+  background: rgba(0,0,0,0.06);
+  z-index: 1;
+}
+.flip-card .val {
+  position: relative;
+  z-index: 2;
+}
+.flip-card.flip-anim {
+  animation: flipTick 0.5s ease-in-out;
+}
+@keyframes flipTick {
+  0%   { transform: perspective(300px) rotateX(0deg) scale(1); }
+  45%  { transform: perspective(300px) rotateX(-90deg) scale(0.92); opacity: 0.4; }
+  55%  { transform: perspective(300px) rotateX(90deg) scale(0.92); opacity: 0.4; }
+  100% { transform: perspective(300px) rotateX(0deg) scale(1); opacity: 1; }
+}
+.flip-unit {
+  font-size: 12px;
   color: var(--text-light);
-  margin-top: 6px;
+  font-weight: 500;
+}
+.flip-sep {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--rose-light);
+  margin-top: 18px;
+  opacity: 0.7;
+}
+@media (max-width: 480px) {
+  .flip-card { width: 54px; height: 62px; font-size: 26px; }
+  .flip-sep { font-size: 20px; margin-top: 14px; }
+  .flip-digits { gap: 4px; }
 }
 
 /* ===== 爱情语句 ===== */

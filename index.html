@@ -47,11 +47,26 @@
   <section class="anniversary-bar">
     <div class="heart">💍</div>
     <div class="label">我们于 2025.5.28 结为夫妻，已携手走过</div>
-    <div class="anniversary-digits" id="married-time">
-      <div class="anniversary-item"><div class="num" id="m-days">0</div><div class="unit">天</div></div>
-      <div class="anniversary-item"><div class="num" id="m-hours">0</div><div class="unit">时</div></div>
-      <div class="anniversary-item"><div class="num" id="m-minutes">0</div><div class="unit">分</div></div>
-      <div class="anniversary-item"><div class="num" id="m-seconds">0</div><div class="unit">秒</div></div>
+    <div class="flip-digits" id="married-time">
+      <div class="flip-item">
+        <div class="flip-card" id="fc-days"><span class="val">0</span></div>
+        <div class="flip-unit">天</div>
+      </div>
+      <div class="flip-sep">:</div>
+      <div class="flip-item">
+        <div class="flip-card" id="fc-hours"><span class="val">00</span></div>
+        <div class="flip-unit">时</div>
+      </div>
+      <div class="flip-sep">:</div>
+      <div class="flip-item">
+        <div class="flip-card" id="fc-minutes"><span class="val">00</span></div>
+        <div class="flip-unit">分</div>
+      </div>
+      <div class="flip-sep">:</div>
+      <div class="flip-item">
+        <div class="flip-card" id="fc-seconds"><span class="val">00</span></div>
+        <div class="flip-unit">秒</div>
+      </div>
     </div>
   </section>
 
@@ -153,8 +168,28 @@
 (function(){
   YWLL.initDemoData();
 
-  // 结婚时长统计
+  // 结婚时长统计 + 翻页动画
   const WEDDING = new Date('2025-05-28T00:00:00');
+  const timeState = { days: -1, hours: -1, minutes: -1, seconds: -1 };
+
+  function setFlipValue(id, value, pad) {
+    const card = document.getElementById(id);
+    if (!card) return;
+    const str = pad ? String(value).padStart(2, '0') : String(value);
+    const old = card.querySelector('.val').textContent;
+    if (old === str) return;
+    // 先触发动画，在动画中间替换数字
+    card.classList.remove('flip-anim');
+    void card.offsetWidth; // force reflow
+    card.classList.add('flip-anim');
+    setTimeout(() => {
+      card.querySelector('.val').textContent = str;
+    }, 230);
+    setTimeout(() => {
+      card.classList.remove('flip-anim');
+    }, 500);
+  }
+
   function updateMarriedTime() {
     const now = new Date();
     const diff = now - WEDDING;
@@ -163,10 +198,11 @@
     const hours = Math.floor((totalSeconds % (24*60*60)) / (60*60));
     const minutes = Math.floor((totalSeconds % (60*60)) / 60);
     const seconds = totalSeconds % 60;
-    document.getElementById('m-days').textContent = days;
-    document.getElementById('m-hours').textContent = hours;
-    document.getElementById('m-minutes').textContent = minutes;
-    document.getElementById('m-seconds').textContent = seconds;
+
+    if (days !== timeState.days) { timeState.days = days; setFlipValue('fc-days', days, false); }
+    if (hours !== timeState.hours) { timeState.hours = hours; setFlipValue('fc-hours', hours, true); }
+    if (minutes !== timeState.minutes) { timeState.minutes = minutes; setFlipValue('fc-minutes', minutes, true); }
+    if (seconds !== timeState.seconds) { timeState.seconds = seconds; setFlipValue('fc-seconds', seconds, true); }
   }
   updateMarriedTime();
   setInterval(updateMarriedTime, 1000);
