@@ -47,10 +47,19 @@ img { max-width: 100%; display: block; }
   height: 56px;
 }
 .logo {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--rose);
-  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.logo svg {
+  height: 28px;
+  width: auto;
+}
+.logo-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 1px;
 }
 .nav-links {
   display: flex;
@@ -193,41 +202,45 @@ textarea { resize: vertical; min-height: 100px; }
   text-shadow: 0 1px 6px rgba(0,0,0,0.3);
 }
 
-/* ===== 纪念日倒计时 ===== */
-.countdown-bar {
+/* ===== 结婚时长统计 ===== */
+.anniversary-bar {
   background: linear-gradient(135deg, var(--cream-card), #fff);
   border-radius: var(--radius);
-  padding: 24px 28px;
+  padding: 28px;
   margin-top: 28px;
   text-align: center;
   box-shadow: 0 6px 20px var(--shadow);
   border: 1px solid rgba(224, 108, 117, 0.1);
 }
-.countdown-label {
+.anniversary-bar .heart {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.anniversary-bar .label {
   font-size: 15px;
   color: var(--text-light);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
-.countdown-digits {
+.anniversary-digits {
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
   flex-wrap: wrap;
 }
-.countdown-item {
+.anniversary-item {
   text-align: center;
-  min-width: 64px;
+  min-width: 72px;
 }
-.countdown-item .num {
-  font-size: 36px;
+.anniversary-item .num {
+  font-size: 38px;
   font-weight: 700;
   color: var(--rose);
   line-height: 1;
 }
-.countdown-item .unit {
-  font-size: 12px;
+.anniversary-item .unit {
+  font-size: 13px;
   color: var(--text-light);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 /* ===== 爱情语句 ===== */
